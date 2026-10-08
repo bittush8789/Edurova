@@ -29,10 +29,10 @@ export default function OverviewTab({ analysis }: OverviewTabProps) {
       {/* ─── Mode & Actions Bar ─── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/[0.02] border border-white/5 rounded-2xl p-2.5 sm:px-4 sm:py-3">
         {/* Lens Switcher */}
-        <div className="flex items-center gap-1 bg-surface-200/60 p-1 rounded-xl">
+        <div className="flex items-center gap-1 bg-surface-200/60 p-1 rounded-xl overflow-x-auto scrollbar-hide max-w-full">
           <button
             onClick={() => setLens("detailed")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 ${
               lens === "detailed"
                 ? "bg-[#00F59B] text-black font-semibold shadow-sm"
                 : "text-slate-400 hover:text-white"
@@ -43,7 +43,7 @@ export default function OverviewTab({ analysis }: OverviewTabProps) {
           </button>
           <button
             onClick={() => setLens("eli5")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 ${
               lens === "eli5"
                 ? "bg-[#00F59B] text-black font-semibold shadow-sm"
                 : "text-slate-400 hover:text-white"
@@ -54,7 +54,7 @@ export default function OverviewTab({ analysis }: OverviewTabProps) {
           </button>
           <button
             onClick={() => setLens("executive")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 ${
               lens === "executive"
                 ? "bg-[#00F59B] text-black font-semibold shadow-sm"
                 : "text-slate-400 hover:text-white"
@@ -67,7 +67,7 @@ export default function OverviewTab({ analysis }: OverviewTabProps) {
 
         <button
           onClick={handleCopyNotes}
-          className="self-end sm:self-auto px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors border border-white/5"
+          className="self-end sm:self-auto px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors border border-white/5 shrink-0"
           title="Copy all notes to clipboard"
         >
           {copied ? (

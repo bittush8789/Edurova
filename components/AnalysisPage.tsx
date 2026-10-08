@@ -20,34 +20,39 @@ import { formatNotesToMarkdown } from "@/lib/markdown";
 
 type TabId = "overview" | "study" | "chapters" | "transcript" | "chat";
 
-const TABS: { id: TabId; label: string; icon: string; description: string }[] = [
+const TABS: { id: TabId; label: string; shortLabel: string; icon: string; description: string }[] = [
   {
     id: "overview",
     label: "Summary & Key Ideas",
+    shortLabel: "Summary",
     icon: "⚡",
     description: "Main takeaways at a glance",
   },
   {
     id: "study",
     label: "Quiz & Flashcards",
+    shortLabel: "Quiz & Cards",
     icon: "🎯",
     description: "Active recall & test yourself",
   },
   {
     id: "chapters",
     label: "Video Chapters",
+    shortLabel: "Chapters",
     icon: "⏱️",
     description: "Jump to topics by timestamp",
   },
   {
     id: "transcript",
     label: "Read Full Script",
+    shortLabel: "Script",
     icon: "📖",
     description: "Search spoken words",
   },
   {
     id: "chat",
     label: "Ask Any Question",
+    shortLabel: "Chat",
     icon: "💬",
     description: "Friendly answers from the video",
   },
@@ -140,14 +145,14 @@ export default function AnalysisPage({
   return (
     <div className="min-h-screen bg-[#06070a] flex flex-col">
       {/* ─── Top Navigation ─── */}
-      <nav className="sticky top-0 z-40 flex items-center justify-between px-4 md:px-8 py-3.5 border-b border-white/5 bg-[#06070a]/95 backdrop-blur-xl">
+      <nav className="sticky top-0 z-40 flex items-center justify-between px-3 sm:px-6 md:px-8 py-2.5 sm:py-3.5 border-b border-white/5 bg-[#06070a]/95 backdrop-blur-xl">
         <button
           onClick={onReset}
-          className="flex items-center gap-2 text-slate-300 hover:text-white px-3 py-1.5 rounded-lg hover:bg-white/5 transition-all text-sm font-medium group"
+          className="flex items-center gap-1.5 sm:gap-2 text-slate-300 hover:text-white px-2 sm:px-3 py-1.5 rounded-lg hover:bg-white/5 transition-all text-xs sm:text-sm font-medium group"
           id="back-btn"
         >
           <svg
-            className="w-4 h-4 group-hover:-translate-x-1 transition-transform"
+            className="w-4 h-4 group-hover:-translate-x-1 transition-transform shrink-0"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -156,41 +161,41 @@ export default function AnalysisPage({
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
           </svg>
           <span className="hidden sm:inline">Analyze Another Video</span>
-          <span className="sm:hidden">New Video</span>
+          <span className="sm:hidden text-xs">New</span>
         </button>
 
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-sm shadow-sm shadow-brand-500/20">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-xs sm:text-sm shadow-sm shadow-brand-500/20 shrink-0">
             🎬
           </div>
-          <span className="text-white font-bold text-base tracking-tight hidden sm:inline">
+          <span className="text-white font-bold text-sm sm:text-base tracking-tight hidden sm:inline">
             VideoMind <span className="text-[#00F59B]">AI</span>
           </span>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-2.5">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           {/* Save to Library Button */}
           <button
             onClick={handleToggleSave}
             disabled={saveLoading}
-            className={`px-3 py-2 rounded-xl text-xs md:text-sm font-medium border transition-all flex items-center gap-1.5 ${
+            className={`p-2 sm:px-3 sm:py-2 rounded-xl text-xs sm:text-sm font-medium border transition-all flex items-center gap-1.5 ${
               isSaved
                 ? "bg-[#00F59B]/15 text-[#00F59B] border-[#00F59B]/40 hover:bg-[#00F59B]/25 shadow-sm shadow-[#00F59B]/10"
                 : "bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border-white/5"
             }`}
             title={isSaved ? "Saved in your library (click to remove)" : "Save to library"}
           >
-            <span>{isSaved ? "⭐" : "☆"}</span>
+            <span className="text-sm">{isSaved ? "⭐" : "☆"}</span>
             <span className="hidden md:inline">{isSaved ? "Saved" : "Save"}</span>
           </button>
 
-          {/* Copy Markdown (Notion / Notes) Button */}
+          {/* Copy Markdown Button */}
           <button
             onClick={handleCopyMarkdown}
-            className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs md:text-sm font-medium border border-white/5 flex items-center gap-1.5 transition-all"
-            title="Copy Markdown formatted notes (ready for Notion or Obsidian)"
+            className="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs sm:text-sm font-medium border border-white/5 flex items-center gap-1.5 transition-all"
+            title="Copy Markdown formatted notes"
           >
-            <span>{copiedMarkdown ? "✓" : "📋"}</span>
+            <span className="text-sm">{copiedMarkdown ? "✓" : "📋"}</span>
             <span className="hidden md:inline">
               {copiedMarkdown ? "Copied!" : "Markdown"}
             </span>
@@ -199,10 +204,10 @@ export default function AnalysisPage({
           {/* Open Saved Library Button */}
           <button
             onClick={() => setIsLibraryOpen(true)}
-            className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs md:text-sm font-medium border border-white/5 flex items-center gap-1.5 transition-all"
+            className="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs sm:text-sm font-medium border border-white/5 flex items-center gap-1.5 transition-all"
             title="Browse your saved video library"
           >
-            <span>📚</span>
+            <span className="text-sm">📚</span>
             <span className="hidden lg:inline">Library</span>
           </button>
 
@@ -210,7 +215,7 @@ export default function AnalysisPage({
           <button
             onClick={handleExportPDF}
             disabled={exportLoading}
-            className="btn-primary text-xs md:text-sm py-2 px-3 sm:px-4 flex items-center gap-1.5 sm:gap-2 disabled:opacity-60 shadow-md shadow-brand-500/20"
+            className="btn-primary text-xs sm:text-sm py-2 px-2.5 sm:px-4 flex items-center gap-1.5 disabled:opacity-60 shadow-md shadow-brand-500/20"
             id="export-pdf-btn"
             title="Download printable study notes as PDF"
           >
@@ -220,15 +225,15 @@ export default function AnalysisPage({
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                 </svg>
-                <span className="hidden sm:inline">Creating PDF...</span>
+                <span className="hidden sm:inline">Exporting...</span>
               </>
             ) : (
               <>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
                 <span className="hidden sm:inline">PDF Notes</span>
-                <span className="sm:hidden">PDF</span>
+                <span className="sm:hidden text-xs">PDF</span>
               </>
             )}
           </button>
@@ -245,11 +250,11 @@ export default function AnalysisPage({
       )}
 
       {/* ─── Video Overview Card ─── */}
-      <div className="px-4 md:px-8 py-5 max-w-5xl mx-auto w-full">
+      <div className="px-3 sm:px-6 md:px-8 py-4 sm:py-5 max-w-5xl mx-auto w-full">
         <div className="glass rounded-2xl overflow-hidden border border-white/5">
-          <div className="flex flex-col md:flex-row gap-5 p-5">
+          <div className="flex flex-col md:flex-row gap-4 sm:gap-5 p-4 sm:p-5">
             {/* Thumbnail */}
-            <div className="relative flex-shrink-0 w-full md:w-56 h-36 md:h-32 rounded-xl overflow-hidden bg-surface-300">
+            <div className="relative flex-shrink-0 w-full md:w-56 aspect-video md:aspect-auto md:h-32 rounded-xl overflow-hidden bg-surface-300">
               {!thumbError ? (
                 <Image
                   src={videoInfo.thumbnailUrl}
@@ -283,19 +288,19 @@ export default function AnalysisPage({
 
             {/* Video Details */}
             <div className="flex flex-col justify-center gap-2 min-w-0">
-              <h1 className="text-white font-bold text-base md:text-lg leading-snug line-clamp-2">
+              <h1 className="text-white font-bold text-sm sm:text-base md:text-lg leading-snug line-clamp-2">
                 {videoInfo.title}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-3 text-sm">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm">
                 <span className="flex items-center gap-1.5 text-slate-300 font-medium">
-                  <svg className="w-4 h-4 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-4 h-4 text-brand-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                   </svg>
-                  {videoInfo.channel}
+                  <span className="truncate max-w-[200px]">{videoInfo.channel}</span>
                 </span>
 
-                <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 text-xs border border-emerald-500/20">
+                <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 text-[11px] sm:text-xs border border-emerald-500/20">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   Subtitles & Notes Ready
                 </span>
@@ -320,9 +325,9 @@ export default function AnalysisPage({
       </div>
 
       {/* ─── Friendly Tab Navigation ─── */}
-      <div className="sticky top-[58px] z-30 bg-[#06070a]/95 backdrop-blur-xl border-b border-white/5">
-        <div className="px-4 md:px-8 max-w-5xl mx-auto">
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide py-2">
+      <div className="sticky top-[53px] sm:top-[58px] z-30 bg-[#06070a]/95 backdrop-blur-xl border-b border-white/5">
+        <div className="px-3 sm:px-6 md:px-8 max-w-5xl mx-auto">
+          <div className="flex gap-1.5 sm:gap-2 overflow-x-auto scrollbar-hide py-2">
             {TABS.map((tab) => {
               const isActive = activeTab === tab.id;
               return (
@@ -330,22 +335,23 @@ export default function AnalysisPage({
                   key={tab.id}
                   id={`tab-${tab.id}`}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all shrink-0 ${
+                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all shrink-0 ${
                     isActive
                       ? "bg-brand-500 text-white shadow-lg shadow-brand-500/25"
                       : "text-slate-400 hover:text-white hover:bg-white/5"
                   }`}
                 >
-                  <span className="text-base">{tab.icon}</span>
-                  <span>{tab.label}</span>
+                  <span className="text-sm sm:text-base">{tab.icon}</span>
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className="sm:hidden">{tab.shortLabel}</span>
                   {tab.id === "study" && (
-                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#00F59B]/20 text-[#00F59B] font-bold uppercase tracking-wider">
+                    <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.2 rounded-full bg-[#00F59B]/20 text-[#00F59B] font-bold uppercase tracking-wider">
                       New
                     </span>
                   )}
                   {tab.id === "chat" && chatHistory.length > 0 && (
                     <span
-                      className={`ml-1 px-1.5 py-0.5 rounded-full text-xs font-semibold ${
+                      className={`ml-0.5 sm:ml-1 px-1.5 py-0.2 sm:py-0.5 rounded-full text-[10px] sm:text-xs font-semibold ${
                         isActive
                           ? "bg-white/20 text-white"
                           : "bg-brand-500/20 text-brand-300"

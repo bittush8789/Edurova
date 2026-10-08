@@ -161,33 +161,34 @@ export default function AppPage() {
     <div className="min-h-screen bg-[#06070a] text-slate-100 flex flex-col selection:bg-[#00F59B] selection:text-black">
       {/* ─── Top Service Navigation ─── */}
       <header className="sticky top-0 z-40 border-b border-white/5 bg-[#06070a]/90 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 h-18 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-xl bg-[#00F59B]/10 border border-[#00F59B]/30 flex items-center justify-center text-[#00F59B] text-sm green-glow-subtle group-hover:scale-105 transition-transform">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 md:px-8 h-16 sm:h-18 flex items-center justify-between">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group">
+              <div className="w-8 h-8 rounded-xl bg-[#00F59B]/10 border border-[#00F59B]/30 flex items-center justify-center text-[#00F59B] text-sm green-glow-subtle group-hover:scale-105 transition-transform shrink-0">
                 🎬
               </div>
-              <span className="text-white font-extrabold text-lg tracking-tight">
+              <span className="text-white font-extrabold text-base sm:text-lg tracking-tight">
                 VideoMind <span className="text-[#00F59B]">AI</span>
               </span>
             </Link>
 
             <Link
               href="/"
-              className="hidden sm:inline-flex text-xs text-slate-400 hover:text-white px-2.5 py-1 rounded-lg hover:bg-white/5 transition-colors"
+              className="hidden md:inline-flex text-xs text-slate-400 hover:text-white px-2.5 py-1 rounded-lg hover:bg-white/5 transition-colors"
             >
               ← Landing Page
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => setIsLibraryOpen(true)}
-              className="text-xs font-medium text-slate-300 hover:text-white px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all flex items-center gap-1.5"
+              className="text-xs font-medium text-slate-300 hover:text-white px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all flex items-center gap-1.5"
               title="Open your saved video notes"
             >
               <span>📚</span>
-              <span>Saved Library</span>
+              <span className="hidden sm:inline">Saved Library</span>
+              <span className="sm:hidden">Library</span>
             </button>
 
             <UserMenu />
@@ -196,31 +197,31 @@ export default function AppPage() {
       </header>
 
       {/* ─── Main Service Dashboard ─── */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 md:px-8 py-12 md:py-16 hero-bg subtle-grid relative">
+      <main className="flex-1 flex flex-col items-center justify-center px-3 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 hero-bg subtle-grid relative">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[280px] bg-[#00F59B]/10 blur-[130px] pointer-events-none rounded-full" />
 
         <div className="max-w-3xl w-full mx-auto relative z-10 flex flex-col items-center text-center">
           {/* Workspace Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/10 mb-6 backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/10 mb-4 sm:mb-6 backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-[#00F59B] animate-pulse" />
-            <span className="text-xs font-semibold text-slate-300 tracking-wide uppercase">
+            <span className="text-[11px] sm:text-xs font-semibold text-slate-300 tracking-wide uppercase">
               VideoMind AI Workspace
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-3 sm:mb-4">
             Analyze YouTube Video
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-10 leading-relaxed">
+          <p className="text-slate-400 text-xs sm:text-base max-w-xl mx-auto mb-6 sm:mb-10 leading-relaxed px-2">
             Paste any YouTube link to instantly generate easy-to-read summaries, chapters, active-recall flashcards, and interactive Q&A.
           </p>
 
           {/* ─── URL Input Card ─── */}
-          <div className="w-full saas-card p-4 sm:p-5 rounded-3xl border border-white/10 bg-[#090b10]/95 shadow-2xl relative mb-8">
-            <form onSubmit={handleAnalyze} className="flex flex-col sm:flex-row gap-3">
+          <div className="w-full saas-card p-3 sm:p-5 rounded-2xl sm:rounded-3xl border border-white/10 bg-[#090b10]/95 shadow-2xl relative mb-6 sm:mb-8">
+            <form onSubmit={handleAnalyze} className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
               <div className="relative flex-1">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
-                  <svg className="w-5 h-5 text-[#00F59B]" fill="currentColor" viewBox="0 0 24 24">
+                <div className="absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#00F59B]" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
                   </svg>
                 </div>
@@ -232,18 +233,18 @@ export default function AppPage() {
                     setUrl(e.target.value);
                     if (error) setError("");
                   }}
-                  placeholder="Paste YouTube link (e.g., https://www.youtube.com/watch?v=...)"
-                  className="w-full h-14 pl-12 pr-24 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#00F59B]/50 transition-colors"
+                  placeholder="Paste YouTube link (https://youtube.com/watch?v=...)"
+                  className="w-full h-12 sm:h-14 pl-10 sm:pl-12 pr-20 sm:pr-24 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-[#00F59B]/50 transition-colors"
                   disabled={loading}
                   autoFocus
                 />
 
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                <div className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
                   {url ? (
                     <button
                       type="button"
                       onClick={() => setUrl("")}
-                      className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-white/10 text-xs transition-colors"
+                      className="p-1 sm:p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-white/10 text-xs transition-colors"
                       title="Clear"
                     >
                       ✕
@@ -252,7 +253,7 @@ export default function AppPage() {
                     <button
                       type="button"
                       onClick={handlePaste}
-                      className="px-2.5 py-1 text-xs text-slate-400 hover:text-[#00F59B] bg-white/5 hover:bg-white/10 rounded-lg border border-white/5 transition-colors"
+                      className="px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs text-slate-400 hover:text-[#00F59B] bg-white/5 hover:bg-white/10 rounded-lg border border-white/5 transition-colors"
                       title="Paste from clipboard"
                     >
                       Paste
@@ -264,7 +265,7 @@ export default function AppPage() {
               <button
                 type="submit"
                 disabled={loading || !url.trim()}
-                className="btn-primary h-14 px-8 text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-40 shadow-xl shadow-[#00F59B]/20"
+                className="btn-primary h-12 sm:h-14 px-5 sm:px-8 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-40 shadow-xl shadow-[#00F59B]/20 w-full sm:w-auto"
               >
                 {loading ? (
                   <>

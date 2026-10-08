@@ -288,10 +288,10 @@ export default function StudyTab({ transcript, videoTitle }: StudyTabProps) {
           {/* 3D Flip Card Container */}
           <div
             onClick={() => setIsFlipped((prev) => !prev)}
-            className="cursor-pointer select-none perspective-[1000px] min-h-[320px] md:min-h-[350px] relative w-full group"
+            className="cursor-pointer select-none perspective-[1000px] min-h-[260px] sm:min-h-[320px] md:min-h-[350px] relative w-full group"
           >
             <div
-              className={`w-full h-full min-h-[320px] md:min-h-[350px] rounded-3xl p-6 md:p-10 flex flex-col justify-between transition-transform duration-500 transform-style-3d border ${
+              className={`w-full h-full min-h-[260px] sm:min-h-[320px] md:min-h-[350px] rounded-2xl sm:rounded-3xl p-4 sm:p-7 md:p-10 flex flex-col justify-between transition-transform duration-500 transform-style-3d border ${
                 isFlipped
                   ? "bg-gradient-to-b from-surface-200/90 to-surface-300/80 border-[#00F59B]/40 shadow-xl shadow-[#00F59B]/5"
                   : "bg-gradient-to-b from-surface-200/90 to-surface-100/90 border-white/10 hover:border-white/20 shadow-xl"
@@ -299,10 +299,10 @@ export default function StudyTab({ transcript, videoTitle }: StudyTabProps) {
             >
               {/* Header badge */}
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#00F59B]/10 text-[#00F59B] border border-[#00F59B]/20">
+                <span className="px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-[#00F59B]/10 text-[#00F59B] border border-[#00F59B]/20">
                   {currentCard.concept || "Key Topic"}
                 </span>
-                <span className="text-xs text-slate-400 group-hover:text-slate-300 flex items-center gap-1">
+                <span className="text-[11px] sm:text-xs text-slate-400 group-hover:text-slate-300 flex items-center gap-1">
                   <span>{isFlipped ? "Showing Answer" : "Tap to Flip"}</span>
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
@@ -311,22 +311,22 @@ export default function StudyTab({ transcript, videoTitle }: StudyTabProps) {
               </div>
 
               {/* Card Body */}
-              <div className="my-auto py-6">
+              <div className="my-auto py-4 sm:py-6">
                 {!isFlipped ? (
-                  <div className="space-y-3">
-                    <span className="text-xs font-semibold tracking-wider uppercase text-slate-400">
+                  <div className="space-y-2 sm:space-y-3">
+                    <span className="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-slate-400">
                       Question / Concept
                     </span>
-                    <h3 className="text-lg md:text-2xl font-bold text-white leading-relaxed">
+                    <h3 className="text-base sm:text-xl md:text-2xl font-bold text-white leading-relaxed">
                       {currentCard.question}
                     </h3>
                   </div>
                 ) : (
-                  <div className="space-y-3">
-                    <span className="text-xs font-semibold tracking-wider uppercase text-[#00F59B]">
+                  <div className="space-y-2 sm:space-y-3">
+                    <span className="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-[#00F59B]">
                       Explanation & Answer
                     </span>
-                    <p className="text-sm md:text-lg text-slate-200 leading-relaxed font-normal">
+                    <p className="text-xs sm:text-base md:text-lg text-slate-200 leading-relaxed font-normal">
                       {currentCard.answer}
                     </p>
                   </div>
@@ -334,10 +334,10 @@ export default function StudyTab({ transcript, videoTitle }: StudyTabProps) {
               </div>
 
               {/* Card Footer */}
-              <div className="flex items-center justify-between pt-4 border-t border-white/5 text-xs text-slate-400">
-                <span>VideoMind Active Recall</span>
-                <span className="text-slate-400">
-                  {isFlipped ? "Click anywhere to see question" : "Click anywhere to reveal answer"}
+              <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-white/5 text-[11px] sm:text-xs text-slate-400">
+                <span>Active Recall</span>
+                <span className="text-slate-400 hidden xs:inline">
+                  {isFlipped ? "Tap to see question" : "Tap to reveal answer"}
                 </span>
               </div>
 

@@ -280,19 +280,19 @@ export default function HomePage() {
       </header>
 
       {/* ─── 2. Hero Section ─── */}
-      <section className="relative hero-bg subtle-grid pt-16 md:pt-24 pb-20 px-4 md:px-8 overflow-hidden">
+      <section className="relative hero-bg subtle-grid pt-12 sm:pt-16 md:pt-24 pb-16 sm:pb-20 px-3 sm:px-6 md:px-8 overflow-hidden">
         {/* Glow ambient background lights */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-[#00F59B]/10 blur-[130px] pointer-events-none rounded-full" />
 
         <div className="max-w-5xl mx-auto flex flex-col items-center text-center relative z-10">
           {/* Green Pill Badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#00F59B]/30 bg-[#00F59B]/5 text-[#00F59B] text-xs font-semibold mb-8 animate-fade-in">
+          <div className="inline-flex items-center gap-2.5 px-3.5 sm:px-4 py-1.5 rounded-full border border-[#00F59B]/30 bg-[#00F59B]/5 text-[#00F59B] text-xs font-semibold mb-6 sm:mb-8 animate-fade-in">
             <span className="pulse-dot" />
             <span>AI-Powered YouTube Learning Assistant</span>
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight leading-[1.08] max-w-4xl mb-6">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.08] max-w-4xl mb-4 sm:mb-6">
             Turn Any YouTube Video Into{" "}
             <span className="bg-gradient-to-r from-white via-slate-100 to-[#00F59B] bg-clip-text text-transparent">
               AI-Powered Knowledge

@@ -89,7 +89,7 @@ function LoginForm() {
         </span>
       </Link>
 
-      <div className="saas-card max-w-md w-full p-8 md:p-10 rounded-3xl border border-white/10 bg-[#090b10] shadow-2xl">
+      <div className="saas-card max-w-md w-full p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-white/10 bg-[#090b10] shadow-2xl">
         <div className="text-center mb-6">
           <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
             {forgotMode ? "Reset Password" : "Welcome Back"}

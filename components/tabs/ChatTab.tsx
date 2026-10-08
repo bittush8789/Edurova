@@ -107,7 +107,7 @@ export default function ChatTab({
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-270px)] min-h-[480px] animate-fade-in">
+    <div className="flex flex-col h-[calc(100dvh-230px)] sm:h-[calc(100vh-270px)] min-h-[360px] sm:min-h-[480px] animate-fade-in">
       {/* ─── Chat messages area ─── */}
       <div className="flex-1 overflow-y-auto space-y-4 pr-1 pb-4">
         {/* Empty state greeting */}

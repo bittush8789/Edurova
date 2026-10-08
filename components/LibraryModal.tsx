@@ -86,17 +86,17 @@ export default function LibraryModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
       {/* Modal Backdrop click */}
       <div className="absolute inset-0" onClick={onClose} />
 
       <div
-        className="relative w-full max-w-3xl max-h-[85vh] bg-[#0c0d12] border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col z-10 animate-scaleUp"
+        className="relative w-full max-w-3xl max-h-[90dvh] sm:max-h-[85vh] bg-[#0c0d12] border border-white/10 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col z-10 animate-scaleUp"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ─── Modal Header ─── */}
-        <div className="p-5 md:p-6 border-b border-white/5 flex items-center justify-between gap-4 bg-surface-100/50">
-          <div className="flex items-center gap-3">
+        <div className="p-4 sm:p-6 border-b border-white/5 flex items-center justify-between gap-3 sm:gap-4 bg-surface-100/50">
+          <div className="flex items-center gap-2.5 sm:gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#00F59B]/20 to-emerald-500/10 border border-[#00F59B]/30 flex items-center justify-center text-lg shadow-sm">
               📚
             </div>

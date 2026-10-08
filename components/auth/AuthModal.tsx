@@ -121,8 +121,8 @@ export default function AuthModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
-      <div className="saas-card max-w-md w-full p-8 rounded-3xl border border-white/10 bg-[#090b10] shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in overflow-y-auto">
+      <div className="saas-card max-w-md w-full p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-white/10 bg-[#090b10] shadow-2xl relative my-auto">
         {/* Close button */}
         <button
           onClick={onClose}
