@@ -9,8 +9,6 @@ import TranscriptTab from "./tabs/TranscriptTab";
 import ChatTab from "./tabs/ChatTab";
 import StudyTab from "./tabs/StudyTab";
 import LibraryModal from "@/components/LibraryModal";
-import UserMenu from "@/components/auth/UserMenu";
-import { useAuth } from "@/context/AuthContext";
 import {
   saveNoteToLibrary,
   deleteNoteFromLibrary,
@@ -69,7 +67,6 @@ export default function AnalysisPage({
   onReset,
   onSelectSavedNote,
 }: AnalysisPageProps) {
-  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<TabId>("overview");
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [exportLoading, setExportLoading] = useState(false);
@@ -85,17 +82,17 @@ export default function AnalysisPage({
   const { videoInfo, transcript, analysis, rawTranscript } = data;
 
   useEffect(() => {
-    setIsSaved(isNoteAlreadySaved(user?.uid, videoInfo.id));
-  }, [user?.uid, videoInfo.id]);
+    setIsSaved(isNoteAlreadySaved(undefined, videoInfo.id));
+  }, [videoInfo.id]);
 
   const handleToggleSave = async () => {
     setSaveLoading(true);
     try {
       if (isSaved) {
-        await deleteNoteFromLibrary(user?.uid, videoInfo.id);
+        await deleteNoteFromLibrary(undefined, videoInfo.id);
         setIsSaved(false);
       } else {
-        await saveNoteToLibrary(user?.uid, data);
+        await saveNoteToLibrary(undefined, data);
         setIsSaved(true);
       }
     } finally {
@@ -237,8 +234,6 @@ export default function AnalysisPage({
               </>
             )}
           </button>
-
-          <UserMenu />
         </div>
       </nav>
 

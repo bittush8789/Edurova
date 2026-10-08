@@ -7,7 +7,6 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-7.0-3178C6?style=for-the-badge&logo=typescript)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css)
 ![Groq](https://img.shields.io/badge/Groq_Cloud-Ultra_Fast_AI-F55036?style=for-the-badge&logo=groq)
-![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase)
 
 **Transform any YouTube video into structured, AI-powered study guides, interactive quizzes, flashcards, and chat knowledge in seconds.**
 
@@ -25,7 +24,7 @@
 - Transcript-grounded contextual chat
 - Self-assessment flashcards and dynamic MCQ quizzes
 - Formatted, publication-grade PDF study guides
-- Firebase Authentication for persistent study libraries
+- Instant access without login or authentication (local browser storage for saved study library)
 
 ---
 
@@ -38,9 +37,9 @@
 | ⏱️ **Timestamped Chapters** | AI-segmented breakdown with direct YouTube timestamp jump links. |
 | 💬 **Transcript-Grounded Chat** | Ask detailed follow-up questions; answers are strictly grounded in video transcripts with citations. |
 | 🗂️ **Study Suite (Flashcards & Quizzes)**| Practice active recall with interactive flashcards and AI-generated multi-choice quizzes. |
-| 📝 **Personal Note-Taking & Library** | Save custom notes and access your historical learning library across sessions. |
+| 📝 **Personal Note-Taking & Library** | Save custom notes and access your historical learning library across sessions (stored locally). |
 | 📄 **PDF Study Guide Export** | Generates clean, downloadable PDF documentation using PDFKit. |
-| 🔐 **Authentication** | Secure authentication via Firebase Auth (Google OAuth & Email/Password). |
+| 🚀 **Zero Login Required** | Instant access for everyone without needing sign up or login accounts. |
 
 ---
 
@@ -52,7 +51,7 @@
 - **AI Engine**: [Groq Cloud SDK](https://console.groq.com) (Default: `openai/gpt-oss-120b` or `llama-3.3-70b-versatile`)
 - **Captions & Extraction**: `youtube-transcript` + YouTube oEmbed API
 - **Document Engine**: [PDFKit](https://pdfkit.org/)
-- **Authentication & Backend**: [Firebase Authentication](https://firebase.google.com/)
+- **Storage**: Local browser storage for study library notes
 
 ---
 
@@ -62,7 +61,6 @@
 - **Node.js**: v18.18.0 or later (v20+ recommended)
 - **npm** or **pnpm** / **yarn**
 - A free **[Groq Cloud API Key](https://console.groq.com)**
-- A **[Firebase Project](https://console.firebase.google.com)** with Authentication enabled
 
 ### 1. Clone the Repository
 ```bash
@@ -87,14 +85,6 @@ Populate the required credentials in `.env.local`:
 # Groq AI
 GROQ_API_KEY=gsk_your_groq_api_key_here
 GROQ_MODEL=openai/gpt-oss-120b
-
-# Firebase Auth
-NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project_id.firebasestorage.app
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 ```
 
 ### 4. Run Development Server
@@ -112,12 +102,6 @@ Open your browser and navigate to **[http://localhost:3000](http://localhost:300
 | :--- | :--- | :---: | :--- |
 | `GROQ_API_KEY` | Server | **Yes** | API key from Groq Console. |
 | `GROQ_MODEL` | Server | No | Target model (Defaults to `openai/gpt-oss-120b`). |
-| `NEXT_PUBLIC_FIREBASE_API_KEY` | Client | **Yes** | Firebase web app API key. |
-| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | Client | **Yes** | Firebase authentication domain. |
-| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | Client | **Yes** | Firebase project identifier. |
-| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`| Client | **Yes** | Firebase cloud storage bucket domain. |
-| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | Client | **Yes** | Firebase messaging sender ID. |
-| `NEXT_PUBLIC_FIREBASE_APP_ID` | Client | **Yes** | Firebase web application ID. |
 
 ---
 
@@ -128,45 +112,48 @@ Open your browser and navigate to **[http://localhost:3000](http://localhost:300
 - **Body**:
   ```json
   {
-    "url": "https://www.youtube.com/watch?v=..."
+    "url": "https://www.youtube.com/watch?v=VIDEO_ID"
   }
   ```
-- **Returns**: Video metadata, full transcript, generated summary, chapters, key takeaways, and flashcards.
 
 ### 2. Contextual Chat
 - **Route**: `POST /api/chat`
 - **Body**:
   ```json
   {
-    "transcript": "...",
-    "messages": [
-      { "role": "user", "content": "Explain the concept introduced at 02:15" }
-    ]
+    "message": "Explain the concept introduced at 03:45",
+    "history": [],
+    "transcript": "Full video transcript...",
+    "videoTitle": "Video Title"
   }
   ```
-- **Returns**: Groq LLM text stream or response grounded strictly in the provided transcript.
 
-### 3. Generate Quizzes
+### 3. Quiz & Flashcards Generator
 - **Route**: `POST /api/generate-quiz`
 - **Body**:
   ```json
   {
-    "transcript": "...",
-    "count": 5
+    "transcript": "Full video transcript...",
+    "videoTitle": "Video Title"
   }
   ```
-- **Returns**: An array of multiple-choice questions with options, correct answer index, and explanation.
 
-### 4. Export to PDF
+### 4. PDF Study Guide Export
 - **Route**: `POST /api/export-pdf`
-- **Body**: Complete analysis payload + optional user notes & Q&A log.
-- **Returns**: Binary stream of a formatted `.pdf` document.
+- **Body**:
+  ```json
+  {
+    "videoInfo": { ... },
+    "analysis": { ... }
+  }
+  ```
 
 ---
 
-## 📁 Project Structure
+## 📂 Project Structure
 
-```
+```text
+edurova/
 ├── app/
 │   ├── api/
 │   │   ├── analyze/route.ts       # Video transcript parsing & AI synthesis
@@ -175,25 +162,19 @@ Open your browser and navigate to **[http://localhost:3000](http://localhost:300
 │   │   └── generate-quiz/route.ts # Dynamic quiz generation
 │   ├── app/page.tsx               # Main application workspace
 │   ├── dashboard/page.tsx         # User saved library & activity dashboard
-│   ├── login/page.tsx             # Firebase login interface
-│   ├── signup/page.tsx            # Firebase signup interface
 │   ├── globals.css                # Tailwind CSS v4 design tokens & themes
-│   └── layout.tsx                 # Root layout & context providers
+│   └── layout.tsx                 # Root layout
 ├── components/
 │   ├── AnalysisPage.tsx           # Video player, study tabs & action header
 │   ├── HomePage.tsx               # Hero landing page & quick URL input
 │   ├── LibraryModal.tsx           # Saved notes & session manager
-│   ├── auth/                      # Login / signup modal & avatar menu
 │   └── tabs/
 │       ├── ChaptersTab.tsx        # Interactive chapter timeline
 │       ├── ChatTab.tsx            # Video conversational assistant
 │       ├── OverviewTab.tsx        # Summary, key takeaways & concepts
 │       ├── StudyTab.tsx           # Flashcard carousel, quiz engine & notes
 │       └── TranscriptTab.tsx      # Filterable & searchable full transcript
-├── context/
-│   └── AuthContext.tsx            # React context for Firebase Auth state
 ├── lib/
-│   ├── firebase.ts                # Firebase SDK client initialization
 │   ├── groq.ts                    # Groq SDK completions & structured prompts
 │   ├── markdown.ts                # Lightweight markdown formatter
 │   ├── pdf.ts                     # PDFKit document generator layout
@@ -227,11 +208,6 @@ The YouTube video must have closed captions enabled (either creator-uploaded cap
 <summary><b>How do I switch the Groq model?</b></summary>
 Set the <code>GROQ_MODEL</code> environment variable in your <code>.env.local</code>. For example:
 <pre>GROQ_MODEL=llama-3.3-70b-versatile</pre>
-</details>
-
-<details>
-<summary><b>Firebase "auth/unauthorized-domain" error?</b></summary>
-In the Firebase Console under <b>Authentication → Settings → Authorized domains</b>, ensure <code>localhost</code> is added to the list.
 </details>
 
 ---

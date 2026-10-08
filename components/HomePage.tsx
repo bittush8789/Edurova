@@ -4,8 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
-import UserMenu from "@/components/auth/UserMenu";
 
 const WORKFLOW_STEPS = [
   {
@@ -136,15 +134,10 @@ const USE_CASES = [
 
 export default function HomePage() {
   const router = useRouter();
-  const { user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleStartApp = () => {
-    if (user) {
-      router.push("/app");
-    } else {
-      router.push("/login?redirect=/app");
-    }
+    router.push("/app");
   };
 
   return (
@@ -177,39 +170,18 @@ export default function HomePage() {
             </a>
           </nav>
 
-          {/* Desktop Auth & CTA */}
+          {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            {user ? (
-              <>
-                <UserMenu />
-                <button
-                  onClick={handleStartApp}
-                  className="btn-primary text-xs sm:text-sm py-2 px-4.5"
-                >
-                  Open VideoMind AI
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/login?redirect=/app"
-                  className="text-xs sm:text-sm font-medium text-slate-300 hover:text-white px-3 py-1.5 transition-colors"
-                >
-                  Log In
-                </Link>
-                <button
-                  onClick={handleStartApp}
-                  className="btn-primary text-xs sm:text-sm py-2 px-4.5"
-                >
-                  Try VideoMind AI
-                </button>
-              </>
-            )}
+            <button
+              onClick={handleStartApp}
+              className="btn-primary text-xs sm:text-sm py-2 px-4.5"
+            >
+              Open Workspace
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
-            {user && <UserMenu />}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-slate-400 hover:text-white p-2"
@@ -245,7 +217,7 @@ export default function HomePage() {
               Use Cases
             </a>
 
-            {user ? (
+            <div className="pt-2 border-t border-white/5">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
@@ -253,28 +225,9 @@ export default function HomePage() {
                 }}
                 className="btn-primary w-full text-center py-2.5 text-xs font-bold"
               >
-                Open VideoMind AI
+                Open Workspace
               </button>
-            ) : (
-              <div className="flex flex-col gap-2 pt-2 border-t border-white/5">
-                <Link
-                  href="/login?redirect=/app"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2.5 text-xs font-medium text-slate-300 bg-white/5 rounded-xl border border-white/10"
-                >
-                  Log In
-                </Link>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleStartApp();
-                  }}
-                  className="btn-primary w-full text-center py-2.5 text-xs font-bold"
-                >
-                  Try VideoMind AI
-                </button>
-              </div>
-            )}
+            </div>
           </div>
         )}
       </header>
@@ -310,7 +263,7 @@ export default function HomePage() {
               onClick={handleStartApp}
               className="btn-primary w-full sm:w-auto text-sm sm:text-base py-4 px-8 font-bold flex items-center justify-center gap-2.5 shadow-xl shadow-[#00F59B]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              <span>{user ? "Open VideoMind AI" : "Try VideoMind AI"}</span>
+              <span>Open VideoMind AI</span>
               <span className="text-lg">⚡</span>
             </button>
             <button
@@ -527,7 +480,7 @@ export default function HomePage() {
               onClick={handleStartApp}
               className="btn-primary text-sm sm:text-base py-4 px-8 font-bold"
             >
-              {user ? "Open VideoMind AI" : "Try VideoMind AI"}
+              Open VideoMind AI
             </button>
             <button
               onClick={handleStartApp}

@@ -1,46 +1,35 @@
-import { db } from "./firebase";
-import {
-  collection,
-  doc,
-  setDoc,
-  getDocs,
-  deleteDoc,
-  query,
-  orderBy,
-} from "firebase/firestore";
 import type { SavedNote, AnalyzeResponse } from "@/types";
 
-const LOCAL_STORAGE_KEY_PREFIX = "edurova_saved_notes_";
+const PRIMARY_STORAGE_KEY = "videomind_saved_notes";
+const LEGACY_STORAGE_KEY = "edurova_saved_notes";
 
-function getLocalNotes(userId: string = "guest"): SavedNote[] {
+function getLocalNotes(): SavedNote[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem(`${LOCAL_STORAGE_KEY_PREFIX}${userId}`);
+    const raw = localStorage.getItem(PRIMARY_STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
   }
 }
 
-function setLocalNotes(userId: string = "guest", notes: SavedNote[]): void {
+function setLocalNotes(notes: SavedNote[]): void {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(
-      `${LOCAL_STORAGE_KEY_PREFIX}${userId}`,
-      JSON.stringify(notes)
-    );
+    localStorage.setItem(PRIMARY_STORAGE_KEY, JSON.stringify(notes));
   } catch (err) {
     console.warn("Failed to write to localStorage:", err);
   }
 }
 
 /**
- * Saves a video analysis to the user's library (Firestore + LocalStorage backup).
+ * Saves a video analysis to the local browser library.
  */
 export async function saveNoteToLibrary(
-  userId: string | undefined,
-  data: AnalyzeResponse
+  dataOrUserId: AnalyzeResponse | string | undefined,
+  maybeData?: AnalyzeResponse
 ): Promise<SavedNote> {
+  const data = (maybeData || dataOrUserId) as AnalyzeResponse;
   const note: SavedNote = {
     id: data.videoInfo.id,
     videoId: data.videoInfo.id,
@@ -51,94 +40,46 @@ export async function saveNoteToLibrary(
     savedAt: Date.now(),
   };
 
-  const effectiveUserId = userId || "guest";
-
-  // 1. Save locally first (instant)
-  const current = getLocalNotes(effectiveUserId);
+  const current = getLocalNotes();
   const filtered = current.filter((n) => n.videoId !== note.videoId);
   const updated = [note, ...filtered];
-  setLocalNotes(effectiveUserId, updated);
-
-  // 2. If authenticated and Firestore is available, save to cloud
-  if (userId && db) {
-    try {
-      const noteRef = doc(db, "users", userId, "saved_notes", note.videoId);
-      await setDoc(noteRef, note);
-    } catch (err) {
-      console.warn("[SavedNotes] Firestore save warning (using local backup):", err);
-    }
-  }
+  setLocalNotes(updated);
 
   return note;
 }
 
 /**
- * Retrieves all saved notes for a user (Cloud Firestore + LocalStorage fallback).
+ * Retrieves all saved notes from local browser library.
  */
 export async function getSavedNotesFromLibrary(
-  userId: string | undefined
+  _userId?: string
 ): Promise<SavedNote[]> {
-  const effectiveUserId = userId || "guest";
-  const localList = getLocalNotes(effectiveUserId);
-
-  if (!userId || !db) {
-    return localList;
-  }
-
-  try {
-    const notesRef = collection(db, "users", userId, "saved_notes");
-    const q = query(notesRef, orderBy("savedAt", "desc"));
-    const snapshot = await getDocs(q);
-
-    if (!snapshot.empty) {
-      const cloudList: SavedNote[] = [];
-      snapshot.forEach((d) => {
-        cloudList.push(d.data() as SavedNote);
-      });
-      // Sync cloud down to local storage
-      setLocalNotes(userId, cloudList);
-      return cloudList;
-    }
-  } catch (err) {
-    console.warn("[SavedNotes] Firestore fetch warning (falling back to local):", err);
-  }
-
-  return localList;
+  return getLocalNotes();
 }
 
 /**
- * Removes a note from the library.
+ * Removes a note from the local library.
  */
 export async function deleteNoteFromLibrary(
-  userId: string | undefined,
-  videoId: string
+  videoIdOrUserId: string | undefined,
+  maybeVideoId?: string
 ): Promise<void> {
-  const effectiveUserId = userId || "guest";
-
-  // 1. Remove from local storage
-  const current = getLocalNotes(effectiveUserId);
+  const videoId = maybeVideoId || videoIdOrUserId;
+  if (!videoId) return;
+  const current = getLocalNotes();
   const updated = current.filter((n) => n.videoId !== videoId);
-  setLocalNotes(effectiveUserId, updated);
-
-  // 2. Remove from Firestore if online & logged in
-  if (userId && db) {
-    try {
-      const noteRef = doc(db, "users", userId, "saved_notes", videoId);
-      await deleteDoc(noteRef);
-    } catch (err) {
-      console.warn("[SavedNotes] Firestore delete warning:", err);
-    }
-  }
+  setLocalNotes(updated);
 }
 
 /**
- * Checks if a video is already saved in the user's library.
+ * Checks if a video is already saved in the library.
  */
 export function isNoteAlreadySaved(
-  userId: string | undefined,
-  videoId: string
+  videoIdOrUserId: string | undefined,
+  maybeVideoId?: string
 ): boolean {
-  const effectiveUserId = userId || "guest";
-  const list = getLocalNotes(effectiveUserId);
+  const videoId = maybeVideoId || videoIdOrUserId;
+  if (!videoId) return false;
+  const list = getLocalNotes();
   return list.some((n) => n.videoId === videoId);
 }

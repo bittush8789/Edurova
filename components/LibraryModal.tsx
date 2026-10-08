@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useAuth } from "@/context/AuthContext";
 import {
   getSavedNotesFromLibrary,
   deleteNoteFromLibrary,
@@ -20,7 +19,6 @@ export default function LibraryModal({
   onClose,
   onSelectNote,
 }: LibraryModalProps) {
-  const { user } = useAuth();
   const [notes, setNotes] = useState<SavedNote[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -32,7 +30,7 @@ export default function LibraryModal({
     let isMounted = true;
     setLoading(true);
 
-    getSavedNotesFromLibrary(user?.uid)
+    getSavedNotesFromLibrary(undefined)
       .then((loaded) => {
         if (isMounted) {
           setNotes(loaded);
@@ -46,7 +44,7 @@ export default function LibraryModal({
     return () => {
       isMounted = false;
     };
-  }, [isOpen, user?.uid]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -65,7 +63,7 @@ export default function LibraryModal({
 
     setDeletingId(videoId);
     try {
-      await deleteNoteFromLibrary(user?.uid, videoId);
+      await deleteNoteFromLibrary(undefined, videoId);
       setNotes((prev) => prev.filter((n) => n.videoId !== videoId));
     } finally {
       setDeletingId(null);
@@ -108,9 +106,7 @@ export default function LibraryModal({
                 </span>
               </h2>
               <p className="text-xs text-slate-400">
-                {user
-                  ? `Saved notes linked to ${user.email}`
-                  : "Saved notes stored in your browser"}
+                Saved notes stored locally in your browser
               </p>
             </div>
           </div>

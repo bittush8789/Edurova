@@ -4,8 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useAuth } from "@/context/AuthContext";
-import UserMenu from "@/components/auth/UserMenu";
 import AnalysisPage from "@/components/AnalysisPage";
 import LibraryModal from "@/components/LibraryModal";
 import type { AnalyzeResponse, SavedNote } from "@/types";
@@ -20,7 +18,6 @@ const LOADING_STEPS = [
 
 export default function AppPage() {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
 
   const [analysisData, setAnalysisData] = useState<AnalyzeResponse | null>(null);
   const [url, setUrl] = useState("");
@@ -32,44 +29,12 @@ export default function AppPage() {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // ─── Direct Route Protection ───
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.replace("/login?redirect=/app");
-    }
-  }, [authLoading, user, router]);
-
   // Load recent library items for quick access
   useEffect(() => {
-    if (user) {
-      getSavedNotesFromLibrary(user.uid)
-        .then((notes) => setRecentNotes(notes.slice(0, 3)))
-        .catch(() => {});
-    }
-  }, [user]);
-
-  // Loading screen while verifying auth session
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-[#06070a] flex flex-col items-center justify-center gap-3">
-        <div className="w-12 h-12 rounded-2xl bg-[#00F59B]/10 border border-[#00F59B]/30 flex items-center justify-center text-[#00F59B] text-xl green-glow-subtle animate-pulse">
-          🎬
-        </div>
-        <div className="flex items-center gap-2 text-slate-400 text-xs">
-          <svg className="w-4 h-4 animate-spin text-[#00F59B]" viewBox="0 0 24 24" fill="none">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-          </svg>
-          <span>Loading VideoMind AI...</span>
-        </div>
-      </div>
-    );
-  }
-
-  // Not authenticated — redirection will occur
-  if (!user) {
-    return null;
-  }
+    getSavedNotesFromLibrary(undefined)
+      .then((notes) => setRecentNotes(notes.slice(0, 3)))
+      .catch(() => {});
+  }, []);
 
   // ─── If video is analyzed, show Analysis Page ───
   if (analysisData) {
@@ -190,8 +155,6 @@ export default function AppPage() {
               <span className="hidden sm:inline">Saved Library</span>
               <span className="sm:hidden">Library</span>
             </button>
-
-            <UserMenu />
           </div>
         </div>
       </header>
