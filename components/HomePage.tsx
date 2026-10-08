@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import UserMenu from "@/components/auth/UserMenu";
@@ -323,7 +324,7 @@ export default function HomePage() {
           </div>
 
           {/* Trust badges */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 mb-12">
             <span className="flex items-center gap-1.5">
               <span className="text-[#00F59B]">✓</span> Free to get started
             </span>
@@ -333,6 +334,58 @@ export default function HomePage() {
             <span className="flex items-center gap-1.5">
               <span className="text-[#00F59B]">✓</span> Instant PDF & Markdown export
             </span>
+          </div>
+
+          {/* Hero Showcase Dashboard Image */}
+          <div className="w-full max-w-5xl mx-auto relative group">
+            {/* Ambient neon gradient glow behind image */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-[#00F59B]/30 via-emerald-500/20 to-teal-400/25 rounded-3xl blur-2xl opacity-60 group-hover:opacity-80 transition duration-700 pointer-events-none" />
+
+            <div className="relative rounded-2xl border border-white/15 bg-[#090b10] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9),0_0_40px_rgba(0,245,155,0.15)] overflow-hidden">
+              {/* Window Header */}
+              <div className="bg-[#0b0e14] px-4 py-3 border-b border-white/10 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
+                  <span className="w-3 h-3 rounded-full bg-yellow-500/80 inline-block" />
+                  <span className="w-3 h-3 rounded-full bg-green-500/80 inline-block" />
+                  <span className="ml-3 text-xs text-slate-400 font-mono hidden sm:inline">
+                    https://videomind.ai/app/workspace
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-md bg-[#00F59B]/10 border border-[#00F59B]/30 text-[#00F59B] text-xs font-semibold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-[#00F59B] animate-pulse" />
+                    Live AI Workspace
+                  </span>
+                </div>
+              </div>
+
+              {/* Main Image View */}
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#06070a]">
+                <Image
+                  src="/images/dashboard-preview.jpg"
+                  alt="VideoMind AI Interactive Workspace Preview"
+                  fill
+                  priority
+                  className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.01]"
+                  sizes="(max-width: 1200px) 100vw, 1100px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#06070a]/40 via-transparent to-transparent pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Feature Highlights Pills under the screenshot */}
+            <div className="hidden sm:flex flex-wrap items-center justify-center gap-3 mt-6">
+              <div className="px-4 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-slate-300 flex items-center gap-2 shadow-lg backdrop-blur-md">
+                <span className="text-base">⚡</span> Ultra-Fast Groq AI Synthesis
+              </div>
+              <div className="px-4 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-slate-300 flex items-center gap-2 shadow-lg backdrop-blur-md">
+                <span className="text-base">⏱️</span> Timestamped Chapters & Timelines
+              </div>
+              <div className="px-4 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-slate-300 flex items-center gap-2 shadow-lg backdrop-blur-md">
+                <span className="text-base">🎯</span> Active Recall Flashcards & Quizzes
+              </div>
+            </div>
           </div>
         </div>
       </section>
