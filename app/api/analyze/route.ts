@@ -68,9 +68,9 @@ export async function POST(req: NextRequest) {
     const rawTranscript = transcriptToText(transcript);
 
     // 5. Check API key
-    if (!process.env.GROQ_API_KEY) {
+    if (!process.env.GROQ_API_KEY || process.env.GROQ_API_KEY.includes("your_groq_api_key_here")) {
       return NextResponse.json(
-        { error: "AI service is currently not ready. Please check back shortly." },
+        { error: "Groq API key not configured. Please set a valid GROQ_API_KEY in .env.local to enable AI analysis." },
         { status: 500 }
       );
     }

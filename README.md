@@ -161,7 +161,6 @@ edurova/
 │   │   ├── export-pdf/route.ts    # PDFKit PDF builder service
 │   │   └── generate-quiz/route.ts # Dynamic quiz generation
 │   ├── app/page.tsx               # Main application workspace
-│   ├── dashboard/page.tsx         # User saved library & activity dashboard
 │   ├── globals.css                # Tailwind CSS v4 design tokens & themes
 │   └── layout.tsx                 # Root layout
 ├── components/
